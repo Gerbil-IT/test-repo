@@ -1,0 +1,89 @@
+spring:
+  jmx:
+    default-domain: ${spring.application.name}
+  activemq:
+    broker-url: ${activemq.url:tcp://localhost:61616}
+    pool:
+      max-connections: 10
+
+server:
+  port: 8085
+
+  # API Registry client configuration
+  eureka:
+    instance:
+      metadata-map:
+        public: true
+        role: live
+    client:
+      serviceUrl:
+        defaultZone: http://${REGISTRY_HOST:localhost}:${REGISTRY_PORT:8761}/registry/eureka/
+      enabled: true
+
+# Configure Internal JWT handler
+sso:
+  jwt:
+    internal:
+      signature:
+        key:
+          type: ENV
+          value: SIG_SECRET_KEY
+
+# logging
+logging:
+  log-http: true
+  level:
+    com.backbase: INFO
+    org.springframework: INFO
+  backbase:
+    persistence:
+      enabled: false
+    eventsourcing:
+      commands-and-events-storage-enabled: false
+
+# Spring health monitoring
+management:
+  health:
+    jms:
+      enabled: false
+
+brd:
+  cbs:
+    api:
+      basePath: ${brd_base_path:http://10.188.212.34:40288}
+      credentials:
+        username: ${brd_user_username:RLO_auth_sit}
+        password: ${brd_user_password:Decebal104}
+  consent:
+    api:
+      basePath: ${brd_base_path:https://srvgateway-omnichannel-dev.apps.ocptest01.cloud.brd.ro/}
+      oauth2:
+        clientId: ${brd_consent_client_id:udp.openshift}
+        clientSecret: ${brd_consent_client_secret:BRDbrd123#}
+        accessToken: ${brd_consent_access_token:https://srvgateway-omnichannel-dev.apps.ocptest01.cloud.brd.ro/brd-api/v1/mstoken}
+
+backbase:
+  audit:
+    enabled: true
+  security:
+    public:
+      paths: /**/*Public*
+
+mock:
+  enable: false
+
+doc:
+  tc:
+    #typeId: GDPROC001
+    typeId: GDPROC001
+    # Leave forceLanguage empty to get language from request.
+    # This is needed because dev env doesn't have the documents
+    # forceLanguage:
+    forceLanguage: RO
+  cc:
+    #typeId: CCOB001
+    typeId: CCOB001
+    # Leave forceLanguage empty to get language from request.
+    # This is needed because dev env doesn't have the documents
+    # forceLanguage:
+    forceLanguage: RO
